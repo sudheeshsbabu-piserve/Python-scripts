@@ -6,7 +6,7 @@ import subprocess, time
 ###
  
 # using the check_output() for having the network term retrieval
-devices = subprocess.check_output(['netsh','wlan','show','network'])
+devices = subprocess.check_output(["netsh", "wlan", "show", "network", "mode=Bssid"])
 
 # decode it to strings
 devices = devices.decode('ascii')
