@@ -54,10 +54,10 @@ for i in data:
         names.append(i)
  
 # printing the wifi names
-print("All wifi that system has connected to are ")
-print("-----------------------------------------")
-for name in names:
-    print(name)
+# print("All wifi that system has connected to are ")
+# print("-----------------------------------------")
+# for name in names:
+#     print(name)
 
 
 time.sleep(5)
