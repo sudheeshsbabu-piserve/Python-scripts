@@ -30,6 +30,8 @@ import servicemanager
 import win32event
 import win32service
 import logging.handlers
+import sys
+from datetime import datetime
 
 log_file_path = "C:\\Users\\dell\\Documents\\projects\\python\\log.txt"
 mylogger = logging.getLogger("TestLogger")
@@ -41,10 +43,10 @@ class SMWinservice(win32serviceutil.ServiceFramework):
     '''Base class to create winservice in Python'''
 
     _svc_name_ = 'pythonService'
-    _svc_display_name_ = 'Python Service'
+    _svc_display_name_ = 'Python test Service'
     _svc_description_ = 'Python Service Description'
 
-    mylogger.info('Class opened')
+    # mylogger.info('Class opened ' + str(datetime.now()))
 
     @classmethod
     def parse_command_line(cls):
@@ -52,7 +54,7 @@ class SMWinservice(win32serviceutil.ServiceFramework):
         ClassMethod to parse the command line
         '''
         win32serviceutil.HandleCommandLine(cls)
-        mylogger.info('parse_command_line')
+        # mylogger.info('parse_command_line ' + str(datetime.now()))
 
     def __init__(self, args):
         '''
@@ -61,7 +63,7 @@ class SMWinservice(win32serviceutil.ServiceFramework):
         win32serviceutil.ServiceFramework.__init__(self, args)
         self.hWaitStop = win32event.CreateEvent(None, 0, 0, None)
         # socket.setdefaulttimeout(60)
-        mylogger.info('Init')
+        # mylogger.info('Init')
 
     def SvcStop(self):
         '''
@@ -70,13 +72,13 @@ class SMWinservice(win32serviceutil.ServiceFramework):
         self.stop()
         self.ReportServiceStatus(win32service.SERVICE_STOP_PENDING)
         win32event.SetEvent(self.hWaitStop)
-        mylogger.info('svcstop')
+        # mylogger.info('svcstop')
 
     def SvcDoRun(self):
         '''
         Called when the service is asked to start
         '''
-        mylogger.info('svcdorun')
+        # mylogger.info('svcdorun')
         self.start()
         servicemanager.LogMsg(servicemanager.EVENTLOG_INFORMATION_TYPE,
                               servicemanager.PYS_SERVICE_STARTED,
@@ -88,7 +90,7 @@ class SMWinservice(win32serviceutil.ServiceFramework):
         Override to add logic before the start
         eg. running condition
         '''
-        mylogger.info('start')
+        # mylogger.info('start')
         pass
 
     def stop(self):
@@ -96,17 +98,22 @@ class SMWinservice(win32serviceutil.ServiceFramework):
         Override to add logic before the stop
         eg. invalidating running condition
         '''
-        mylogger.info('stop')
+        # mylogger.info('stop')
         pass
 
     def main(self):
         '''
         Main class to be ovverridden to add logic
         '''
-        mylogger.info('main')
+        # mylogger.info('main')
         pass
 
 # entry point of the module: copy and paste into the new module
 # ensuring you are calling the "parse_command_line" of the new created class
 if __name__ == '__main__':
-    SMWinservice.parse_command_line()
+    if len(sys.argv) == 1:
+        servicemanager.Initialize()
+        servicemanager.PrepareToHostSingle(SMWinservice)
+        servicemanager.StartServiceCtrlDispatcher()
+    else:
+        SMWinservice.parse_command_line()

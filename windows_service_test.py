@@ -3,7 +3,12 @@ import win32service
 import win32event
 import servicemanager
 import socket
+from datetime import datetime
 
+def WriteToFile():
+    DIR = 'C:\\Users\\dell\\Documents\\projects\\python\\log.txt'
+    with open(DIR, 'a+') as file:
+        file.write(str(datetime.now()))
 
 class AppServerSvc (win32serviceutil.ServiceFramework):
     _svc_name_ = "AaaaTestService2"
@@ -25,7 +30,7 @@ class AppServerSvc (win32serviceutil.ServiceFramework):
         self.main()
 
     def main(self):
-        pass
+        WriteToFile()
 
 if __name__ == '__main__':
     win32serviceutil.HandleCommandLine(AppServerSvc)
