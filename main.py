@@ -31,11 +31,14 @@ class PythonCornerExample(SMWinservice):
             time.sleep(60)
 
 if __name__ == '__main__':
-    PythonCornerExample.parse_command_line()
-    # if len(sys.argv) == 1:
-    #     servicemanager.Initialize()
-    #     servicemanager.PrepareToHostSingle(PythonCornerExample)
-    #     servicemanager.StartServiceCtrlDispatcher()
-    # else:
-    #     # win32serviceutil.HandleCommandLine(RouterService)
-    #     PythonCornerExample.parse_command_line()
+    '''
+    Handle command line argument count issue, otherwise it will not work for executable.
+    '''
+    # PythonCornerExample.parse_command_line()
+    if len(sys.argv) == 1:
+        servicemanager.Initialize()
+        servicemanager.PrepareToHostSingle(PythonCornerExample)
+        servicemanager.StartServiceCtrlDispatcher()
+    else:
+        # win32serviceutil.HandleCommandLine(RouterService)
+        PythonCornerExample.parse_command_line()
